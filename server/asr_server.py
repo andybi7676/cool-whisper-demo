@@ -19,7 +19,7 @@ args = argparser.parse_args()
 
 model_card = args.model_card
 device = "cuda" if torch.cuda.is_available() else "cpu"
-compute_type = "float16" if device == "cuda" and model_card =="andybi7676/cool-whisper" else "float32"
+compute_type = "float16" if device == "cuda" else "float32"
 model = WhisperModel(model_card, device=device, compute_type=compute_type)
 
 logger = logging.getLogger(__name__)

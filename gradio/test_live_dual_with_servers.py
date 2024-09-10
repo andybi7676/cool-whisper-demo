@@ -5,10 +5,10 @@ import torch
 import numpy as np
 import requests
 import os
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 
 WORKDIR = os.getenv("WORKDIR")
-ENV = load_dotenv(f"{WORKDIR}/.env")
+ENV = dotenv_values(f"{WORKDIR}/.env")
 SERVER_PORT = ENV["SERVER_PORT"]
 
 LINE_HEIGHT = 27
@@ -43,7 +43,7 @@ def process_audio_to_cool_whisper(audio_fpath, server_ip=ENV["COOL_WHISPER_SERVE
             for chunk in response.iter_lines():
                 if chunk:  # Filter out keep-alive new chunks
                     chunk_text = chunk.decode('utf-8')
-                    print(chunk_text, end="")
+                    print(chunk_text)
                     response_text += chunk_text + "\n"
                     yield response_text  # Gradually update the text box
 
@@ -63,7 +63,7 @@ def process_audio_to_whisper_large(audio_fpath, server_ip=ENV["WHISPER_LARGE_SER
             for chunk in response.iter_lines():
                 if chunk:  # Filter out keep-alive new chunks
                     chunk_text = chunk.decode('utf-8')
-                    print(chunk_text, end="")
+                    print(chunk_text)
                     response_text += chunk_text + "\n"
                     yield response_text  # Gradually update the text box
 
