@@ -6,14 +6,14 @@ import time
 import argparse
 import json
 import os
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 from faster_whisper import WhisperModel
 
 WORKDIR = os.getenv("WORKDIR")
-ENV = load_dotenv(f"{WORKDIR}/.env")
+ENV = dotenv_values(f"{WORKDIR}/.env")
 
 argparser = argparse.ArgumentParser()
-argparser.add_argument("--model_card", type=str, default="andybi7676/cool-whisper", help="The model card to use for the ASR model.")
+argparser.add_argument("--model_card", type=str, default="andybi7676/cool-whisper", help="The model card to use for the ASR model. Options: [andybi7676/cool-whisper, large-v2]")
 
 args = argparser.parse_args()
 
@@ -23,7 +23,7 @@ compute_type = "float16" if device == "cuda" and model_card =="andybi7676/cool-w
 model = WhisperModel(model_card, device=device, compute_type=compute_type)
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.WARNING)
+# logger.setLevel(logging.INFO)
 logging.getLogger("faster_whisper").setLevel(logger.level)
 
 logger.info(f"Model loaded successfully. | model card: {model_card}, device: {device}, compute type: {compute_type}")
@@ -71,4 +71,4 @@ async def upload_audio_and_transcribe(audio: UploadFile = File(...)):
 # if __name__ == "__main__":
 
 import uvicorn
-uvicorn.run(app, host="0.0.0.0", port=8000)
+uvicorn.run(app, host="0.0.0.0", port=int(ENV["SERVER_PORT"]))
