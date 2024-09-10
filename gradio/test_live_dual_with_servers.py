@@ -38,7 +38,7 @@ def process_audio_to_cool_whisper(audio_fpath, server_ip=ENV["COOL_WHISPER_SERVE
         files = {'audio': open(audio_fpath, 'rb')}
         
         # Stream the response
-        with requests.post(f"http://{server_ip}:8000/upload_audio_and_transcribe", files=files, stream=True) as response:
+        with requests.post(f"http://{server_ip}:{SERVER_PORT}/upload_audio_and_transcribe", files=files, stream=True) as response:
             response_text = ""
             for chunk in response.iter_lines():
                 if chunk:  # Filter out keep-alive new chunks
@@ -58,7 +58,7 @@ def process_audio_to_whisper_large(audio_fpath, server_ip=ENV["WHISPER_LARGE_SER
         files = {'audio': open(audio_fpath, 'rb')}
         
         # Stream the response
-        with requests.post(f"http://{server_ip}:8000/upload_audio_and_transcribe", files=files, stream=True) as response:
+        with requests.post(f"http://{server_ip}:{SERVER_PORT}/upload_audio_and_transcribe", files=files, stream=True) as response:
             response_text = ""
             for chunk in response.iter_lines():
                 if chunk:  # Filter out keep-alive new chunks
@@ -81,7 +81,7 @@ with gr.Blocks() as demo:
     
     # Linking button to audio processing function
     submit_btn.click(fn=process_audio_to_cool_whisper, inputs=audio_input, outputs=text1)
-    # submit_btn.click(fn=process_audio_to_whisper_large, inputs=audio_input, outputs=text2)
+    submit_btn.click(fn=process_audio_to_whisper_large, inputs=audio_input, outputs=text2)
 
 # Launching the interface
 demo.launch()
